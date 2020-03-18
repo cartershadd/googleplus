@@ -53,9 +53,9 @@ class EditPage extends Component {
 
     onSubmit() {
         var userRef = db.collection("userData").doc(firebase.auth().currentUser.uid);
-        return db.runTransaction(function(transaction) {
+        return db.runTransaction(function (transaction) {
 
-            return transaction.get(userRef).then(function(sfDoc) {
+            return transaction.get(userRef).then(function (sfDoc) {
                 if (!sfDoc.exists) {
                     throw "Document does not exist!";
                 }
@@ -86,11 +86,11 @@ class EditPage extends Component {
                 }
                 transaction.update(userRef, update);
             }.bind(this));
-        }.bind(this)).then(function() {
+        }.bind(this)).then(function () {
             console.log("Transaction successfully committed!");
             alert("Your changes have been submitted!");
             this.props.history.push("/");
-        }.bind(this)).catch(function(error) {
+        }.bind(this)).catch(function (error) {
             console.log("Transaction failed: ", error);
             alert("There was an issue making changes to your profile. Please try again.");
         });
@@ -300,6 +300,15 @@ class EditPage extends Component {
         },
     };
 
+    deletePhoto = (url) => {
+        const photoArray = this.state.photoArray;
+        const index = photoArray.indexOf(url);
+        if (index > -1) {
+            photoArray.splice(index, 1);
+        }
+        this.setState({photoArray: photoArray})
+    };
+
     render() {
         return (
             <div className="edit-form-wrapper">
@@ -397,6 +406,13 @@ class EditPage extends Component {
                     </InputGroup>
 
                     <Card.Title>Upload Personal Photos</Card.Title>
+                    {this.state.photoArray.map((photo, index) =>
+                        <div>
+                            <img key={index} className="edit-photos-wrapper" src={photo} alt="photo-array"/>
+                            <Button onClick={() => this.deletePhoto(photo)} className="delete-button"
+                                    variant="danger">Delete</Button>
+                        </div>
+                    )}
                     <FilePond
                         ref={ref => (this.pond = ref)}
                         files={this.state.photos}

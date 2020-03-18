@@ -29,9 +29,9 @@ class AlbumPage extends Component {
                     <Carousel.Item key={index}>
                         <img
                             id="carousel-photo"
-                            className="d-block w-100"
+                            className="d-block"
                             src={photoUrl}
-                            alt="First slide"
+                            alt="slideshow img"
                         />
                     </Carousel.Item>
                 ))}
